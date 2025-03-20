@@ -1,27 +1,41 @@
-# fly.toml app configuration file generated for chatbot-hongduan on 2024-02-18T14:33:24+08:00
+# fly.toml app configuration file generated for lab05-sparkling-river-8620 on 2025-03-19T20:39:03+08:00
 #
-(4) Modify you Procfile with:
-# See https://fly.io/docs/reference/configuration/ for information
-about how to use this file.
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
-app = 'chatbot-hongduan'
-primary_region = 'nrt'
+
+app = 'lab05-sparkling-river-8620'
+primary_region = 'hkg'
+
 [build]
-builder = 'paketobuildpacks/builder:base'
+  builder = 'paketobuildpacks/builder:base'
+
 [env]
-PORT = '8080'
+  PORT = '8080'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
 [[services]]
-internal_port = 8000
-protocol = "tcp"
-[services.concurrency]
-hard_limit = 25
-soft_limit = 20
-type = "connections"
-[[services.ports]]
-handlers = ["http"]
-port = 80
-[[services.ports]]
-handlers = ["tls", "http"]
-port = 443
+  protocol = 'tcp'
+  internal_port = 8000
+
+  [[services.ports]]
+    port = 80
+    handlers = ['http']
+
+  [[services.ports]]
+    port = 443
+    handlers = ['tls', 'http']
+
+  [services.concurrency]
+    type = 'connections'
+    hard_limit = 25
+    soft_limit = 20
+
 [[vm]]
-size = 'shared-cpu-1x'
+  size = 'shared-cpu-1x'
